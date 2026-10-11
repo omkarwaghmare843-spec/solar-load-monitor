@@ -1,0 +1,13 @@
+{
+  "rules": {
+    "live": {
+      ".read": "auth != null",
+      ".write": true
+    },
+    "history": {
+      ".read": "auth != null",
+      ".write": true,
+      ".indexOn": ["timestamp"]
+    }
+  }
+}

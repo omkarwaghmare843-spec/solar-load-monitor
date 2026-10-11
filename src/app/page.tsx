@@ -1,69 +1,146 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { Sun, Plug, BatteryCharging, Zap, BarChart3 } from "lucide-react";
+import AuthGuard from "@/components/AuthGuard";
+import AppShell from "@/components/AppShell";
+import Header from "@/components/Header";
+import StatCard from "@/components/StatCard";
+import Card from "@/components/Card";
+import PowerFlow from "@/components/PowerFlow";
+import FaultAlerts from "@/components/FaultAlerts";
+import PowerBarChart from "@/components/charts/PowerBarChart";
+import TrendLineChart from "@/components/charts/TrendLineChart";
+import { useLiveData } from "@/hooks/useLiveData";
+import { useHistoryData } from "@/hooks/useHistoryData";
+import { aggregateByDay } from "@/lib/aggregate";
+
+export default function DashboardPage() {
+  const { data, connected } = useLiveData();
+  const { history } = useHistoryData(2000);
+  const daily = aggregateByDay(history).slice(-7);
+
+  const todaySolarWh = daily.at(-1)?.solarWh ?? 0;
+  const todayLoadWh = daily.at(-1)?.loadWh ?? 0;
+  const batteryEnergyWh = (data.battery.percent / 100) * 33.3;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <AuthGuard>
+      <AppShell>
+        <Header
+          title="Renewable Energy Monitoring System"
+          subtitle="Solar Microgrid | Live Data & Performance"
+          connected={connected}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+        <main className="flex-1 space-y-4 overflow-y-auto p-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <StatCard
+              icon={Sun}
+              iconColor="var(--series-4)"
+              iconBg="rgba(237,161,0,0.15)"
+              label="Solar Generation"
+              value={`${data.solar.power.toFixed(1)} W`}
+              sublabel="(Today)"
+              footer={`Total: ${todaySolarWh.toFixed(1)} Wh`}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            <StatCard
+              icon={Plug}
+              iconColor="var(--series-1)"
+              iconBg="rgba(42,120,214,0.15)"
+              label="Load Consumption"
+              value={`${data.load.power.toFixed(1)} W`}
+              sublabel="(Today)"
+              footer={`Total: ${todayLoadWh.toFixed(1)} Wh`}
+            />
+            <StatCard
+              icon={BatteryCharging}
+              iconColor="var(--status-good)"
+              iconBg="rgba(12,163,12,0.12)"
+              label="Battery Status"
+              value={`${data.battery.voltage.toFixed(1)} V`}
+              sublabel={`(SOC ${data.battery.percent.toFixed(0)}%)`}
+              footer={`Stored: ${batteryEnergyWh.toFixed(1)} Wh`}
+              tint="var(--success-bg)"
+            />
+            <StatCard
+              icon={Zap}
+              iconColor="var(--accent-purple)"
+              iconBg="rgba(124,58,237,0.12)"
+              label="Power Loss"
+              value={`${data.powerLoss.toFixed(1)} W`}
+              sublabel="(Today)"
+            />
+            <StatCard
+              icon={BarChart3}
+              iconColor="var(--series-3)"
+              iconBg="rgba(27,175,122,0.15)"
+              label="Efficiency"
+              value={`${data.efficiency.toFixed(1)} %`}
+              sublabel="(Current)"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr]">
+            <PowerFlow
+              solarPower={data.solar.power}
+              batteryVoltage={data.battery.voltage}
+              batteryCharging={data.solar.power > data.load.power}
+              loadPower={data.load.power}
+            />
+            <FaultAlerts faults={data.faults} />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <Card title="Solar Generation (Last 7 Days)" icon={Sun} iconColor="var(--series-4)">
+              <PowerBarChart
+                data={daily}
+                xKey="date"
+                bars={[{ key: "solarWh", name: "Solar Generation", color: "var(--series-4)" }]}
+              />
+            </Card>
+            <Card title="Load Consumption (Last 7 Days)" icon={Plug} iconColor="var(--series-1)">
+              <PowerBarChart
+                data={daily}
+                xKey="date"
+                bars={[{ key: "loadWh", name: "Load Consumption", color: "var(--series-1)" }]}
+              />
+            </Card>
+            <Card title="Battery SOC Trend" icon={BatteryCharging} iconColor="var(--status-good)">
+              <TrendLineChart
+                data={daily}
+                xKey="date"
+                lines={[{ key: "avgBatteryPercent", name: "SOC %", color: "var(--status-good)" }]}
+                unit="%"
+              />
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <Card title="Efficiency Trend" icon={BarChart3} iconColor="var(--series-3)">
+              <TrendLineChart
+                data={daily}
+                xKey="date"
+                lines={[{ key: "avgEfficiency", name: "Efficiency", color: "var(--series-3)" }]}
+                unit="%"
+              />
+            </Card>
+            <Card title="Generation vs Consumption" icon={Zap} iconColor="var(--accent-purple)">
+              <PowerBarChart
+                data={daily}
+                xKey="date"
+                bars={[
+                  { key: "solarWh", name: "Generation", color: "var(--series-4)" },
+                  { key: "loadWh", name: "Consumption", color: "var(--series-1)" },
+                ]}
+              />
+            </Card>
+          </div>
+
+          <p className="pt-2 text-center text-xs text-muted">
+            Clean Energy, Better Tomorrow — Monitor your renewable energy system in
+            real-time and track historical performance for a sustainable future.
+          </p>
+        </main>
+      </AppShell>
+    </AuthGuard>
   );
 }
