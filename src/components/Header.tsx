@@ -31,12 +31,12 @@ export default function Header({
   }, []);
 
   return (
-    <header className="flex items-center justify-between border-b border-border bg-surface px-6 py-4">
-      <div>
-        <h1 className="text-lg font-semibold text-foreground">{title}</h1>
-        <p className="text-sm text-muted">{subtitle}</p>
+    <header className="flex flex-col gap-2 border-b border-border bg-surface px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6 sm:py-4">
+      <div className="min-w-0">
+        <h1 className="truncate text-base font-semibold text-foreground sm:text-lg">{title}</h1>
+        <p className="truncate text-xs text-muted sm:text-sm">{subtitle}</p>
       </div>
-      <div className="flex items-center gap-3 text-sm text-muted">
+      <div className="flex items-center gap-3 text-xs text-muted sm:text-sm">
         <span className="flex items-center gap-1.5">
           <span
             className="h-2 w-2 rounded-full"
@@ -44,7 +44,7 @@ export default function Header({
           />
           {connected ? "Live" : "Offline"}
         </span>
-        <span>{now}</span>
+        <span className="whitespace-nowrap">{now}</span>
       </div>
     </header>
   );

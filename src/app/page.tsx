@@ -31,7 +31,7 @@ export default function DashboardPage() {
           subtitle="Solar Microgrid | Live Data & Performance"
           connected={connected}
         />
-        <main className="flex-1 space-y-4 overflow-y-auto p-6">
+        <main className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             <StatCard
               icon={Sun}

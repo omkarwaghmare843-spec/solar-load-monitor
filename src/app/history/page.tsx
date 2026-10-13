@@ -51,7 +51,7 @@ export default function HistoryPage() {
           subtitle="Daily solar, load, and battery performance"
           connected={!loading}
         />
-        <main className="flex-1 space-y-4 overflow-y-auto p-6">
+        <main className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex gap-1 rounded-lg border border-border bg-surface p-1">
               {RANGE_OPTIONS.map((opt, idx) => (
@@ -80,7 +80,7 @@ export default function HistoryPage() {
 
           {!loading && history.length === 0 ? (
             <div className="rounded-xl border border-dashed border-border bg-surface p-10 text-center text-sm text-muted">
-              No historical data yet. Once your ESP32 starts writing to{" "}
+              No historical data yet. Once your ESP8266 starts writing to{" "}
               <code className="rounded bg-background px-1 py-0.5">/history</code> in Firebase,
               records will appear here.
             </div>

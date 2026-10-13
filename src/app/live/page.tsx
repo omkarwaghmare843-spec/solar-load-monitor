@@ -50,17 +50,17 @@ export default function LiveMonitoringPage() {
       <AppShell>
         <Header
           title="Live Monitoring"
-          subtitle="Real-time sensor readings from ESP32 + 2×INA219"
+          subtitle="Real-time sensor readings from ESP8266 + 2×INA219"
           connected={connected}
         />
-        <main className="flex-1 space-y-4 overflow-y-auto p-6">
+        <main className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-            <Card title="Solar (0x40)" icon={Sun} iconColor="var(--series-4)">
+            <Card title="Solar (0x44)" icon={Sun} iconColor="var(--series-4)">
               <ReadingRow label="Bus Voltage" value={data.solar.voltage} unit="V" />
               <ReadingRow label="Current" value={data.solar.current} unit="A" />
               <ReadingRow label="Power" value={data.solar.power} unit="W" />
             </Card>
-            <Card title="Load (0x41)" icon={Plug} iconColor="var(--series-1)">
+            <Card title="Load (0x40)" icon={Plug} iconColor="var(--series-1)">
               <ReadingRow label="Bus Voltage" value={data.load.voltage} unit="V" />
               <ReadingRow label="Current" value={data.load.current} unit="A" />
               <ReadingRow label="Power" value={data.load.power} unit="W" />

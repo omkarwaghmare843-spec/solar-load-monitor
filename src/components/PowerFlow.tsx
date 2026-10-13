@@ -23,12 +23,12 @@ function Node({
   color: string;
 }) {
   return (
-    <div className="flex flex-1 flex-col items-center gap-2 text-center">
+    <div className="flex flex-1 basis-1/2 flex-col items-center gap-2 text-center sm:basis-auto">
       <div
-        className="flex h-14 w-14 items-center justify-center rounded-full"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full sm:h-14 sm:w-14"
         style={{ background: `${color}1a` }}
       >
-        <Icon className="h-6 w-6" style={{ color }} />
+        <Icon className="h-5 w-5 sm:h-6 sm:w-6" style={{ color }} />
       </div>
       <div>
         <p className="text-sm font-semibold text-foreground">{value}</p>
@@ -48,7 +48,7 @@ export default function PowerFlow({
   const balance = solarPower - loadPower;
   return (
     <Card title="Live Power Flow" icon={Activity} iconColor="var(--series-1)">
-      <div className="flex items-center justify-between gap-1 py-2">
+      <div className="flex flex-wrap items-start justify-center gap-y-4 py-2 sm:flex-nowrap sm:items-center sm:justify-between sm:gap-1">
         <Node
           icon={Sun}
           label="Solar Panel"
@@ -56,7 +56,7 @@ export default function PowerFlow({
           sub="(Input)"
           color="var(--series-4)"
         />
-        <ArrowRight className="h-4 w-4 shrink-0 text-muted" />
+        <ArrowRight className="hidden h-4 w-4 shrink-0 text-muted sm:block" />
         <Node
           icon={Cpu}
           label="Controller"
@@ -64,7 +64,7 @@ export default function PowerFlow({
           sub=""
           color="var(--series-1)"
         />
-        <ArrowRight className="h-4 w-4 shrink-0 text-muted" />
+        <ArrowRight className="hidden h-4 w-4 shrink-0 text-muted sm:block" />
         <Node
           icon={BatteryCharging}
           label={batteryCharging ? "Charging" : "Discharging"}
@@ -72,7 +72,7 @@ export default function PowerFlow({
           sub="(Battery)"
           color="var(--status-good)"
         />
-        <ArrowRight className="h-4 w-4 shrink-0 text-muted" />
+        <ArrowRight className="hidden h-4 w-4 shrink-0 text-muted sm:block" />
         <Node
           icon={Lightbulb}
           label="Load"

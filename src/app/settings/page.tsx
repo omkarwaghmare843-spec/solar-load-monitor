@@ -27,7 +27,7 @@ export default function SettingsPage() {
           subtitle="System thresholds and account details"
           connected={true}
         />
-        <main className="flex-1 space-y-4 overflow-y-auto p-6">
+        <main className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
           <Card title="Account" icon={User} iconColor="var(--series-1)">
             <div className="flex items-center justify-between py-2 text-sm">
               <span className="text-muted">Signed in as</span>

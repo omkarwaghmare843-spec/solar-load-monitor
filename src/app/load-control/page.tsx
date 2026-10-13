@@ -35,7 +35,7 @@ export default function LoadControlPage() {
           subtitle="Switch the LED and fan relays connected to the ESP8266"
           connected={connected}
         />
-        <main className="flex-1 space-y-4 overflow-y-auto p-6">
+        <main className="flex-1 space-y-4 overflow-y-auto p-4 sm:p-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <RelayCard
               icon={Lightbulb}
