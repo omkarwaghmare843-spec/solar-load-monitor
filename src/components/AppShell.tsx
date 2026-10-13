@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Activity,
   History,
+  ToggleLeft,
   Settings,
   Sun,
   LogOut,
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/live", label: "Live Monitoring", icon: Activity },
   { href: "/history", label: "Historical Data", icon: History },
+  { href: "/load-control", label: "Load Control", icon: ToggleLeft },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

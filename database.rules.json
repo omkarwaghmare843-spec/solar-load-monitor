@@ -8,6 +8,10 @@
       ".read": "auth != null",
       ".write": true,
       ".indexOn": ["timestamp"]
+    },
+    "control": {
+      ".read": "auth != null",
+      ".write": "auth != null"
     }
   }
 }

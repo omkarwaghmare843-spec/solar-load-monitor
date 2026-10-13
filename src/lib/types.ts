@@ -28,6 +28,17 @@ export interface HistoryEntry extends LiveData {
   id: string;
 }
 
+export interface ControlState {
+  relay1: boolean; // LED — desired state, set by the dashboard
+  relay2: boolean; // FAN — desired state, set by the dashboard
+  relay1_state?: boolean; // confirmed actual state, written back by the ESP8266
+  relay2_state?: boolean;
+}
+
+export function emptyControlState(): ControlState {
+  return { relay1: false, relay2: false };
+}
+
 export const THRESHOLDS = {
   batteryLowVoltage: 9.6,
   batteryFullVoltage: 12.6,
